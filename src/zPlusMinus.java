@@ -1,4 +1,3 @@
-import java.awt.List;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -34,17 +33,18 @@ public class zPlusMinus {
 	private void test() {
 		int a = 0;
 		int b = 0 ;
-		 a = 3 ;
-		a *= 30 ;
-		a = -3 ;
-		b += a ;
-		b += b ;
-		a = a ;
-		a += 4 ;
-		b += 2 ;
-		
-		System.out.println("a = " + a);
-		System.out.println("b = " + b);
+		a = 1 ;
+		for(int i =0; i< 5; i++){
+			b += a ; 
+			a *= 2 ; 
+			System.out.println("a = " + a);
+			System.out.println("b = " + b);
+		}
+		a += 1000 ;
+
+		System.out.println("final a = " + a);
+		System.out.println("final b = " + b);
+
 	}
 
 	private void readFile() {
@@ -52,7 +52,7 @@ public class zPlusMinus {
 		Scanner fileScanner = null;
 
 		try {
-			fileScanner = new Scanner(new File("prog2.zpm"));
+			fileScanner = new Scanner(new File("prog3.zpm"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,6 +69,7 @@ public class zPlusMinus {
 		
 		//Deleting extra spaces
 		commands.removeAll(Arrays.asList("", null));
+		commands.add("endprogram");
 
 //		 This section will print each section of the code individually that
 //		 was divided by a space
@@ -91,7 +92,7 @@ public class zPlusMinus {
 			// This following part of the code takes care of assignments
 			
 			/////////////////Assign from a number//////////////
-			if (values.containsKey(commands.get(i)) && commands.get(i - 1).equals(";") && (!(values.containsKey(commands.get(i + 2))))) {
+			if (values.containsKey(commands.get(i)) && commands.get(i - 1).equals(";") && (!(values.containsKey(commands.get(i + 2)))) && !(commands.get(i+4).equals("ENDFOR")) || values.containsKey(commands.get(i)) && (!(values.containsKey(commands.get(i + 2)))) && !(commands.get(i+4).equals("ENDFOR")) && commands.get(i - 1).equals("ENDFOR")) {
 
 				if (commands.get(i + 1).equals("=")) {
 					values.put(commands.get(i), Integer.parseInt(commands.get(i + 2)));
@@ -112,7 +113,7 @@ public class zPlusMinus {
 			
 			///////////////////Assign from a variable//////////
 			
-			if (values.containsKey(commands.get(i)) && commands.get(i - 1).equals(";") && (values.containsKey(commands.get(i + 2)))) {
+			if (values.containsKey(commands.get(i)) && commands.get(i - 1).equals(";") && (values.containsKey(commands.get(i + 2)) && !(commands.get(i+4).equals("ENDFOR"))) || values.containsKey(commands.get(i))&& (values.containsKey(commands.get(i + 2))) && !(commands.get(i+4).equals("ENDFOR")) && commands.get(i - 1).equals("ENDFOR")) {
 				
 				if (commands.get(i + 1).equals("=")) {
 					values.put(commands.get(i),
@@ -140,6 +141,75 @@ public class zPlusMinus {
 									* values.get(commands.get(i + 2)));
 				}
 			}
+
+			//Handling For Loops here////
+			if(commands.get(i).equals("FOR")){
+				int iterations = Integer.parseInt(commands.get(i+1));
+				
+				for(int j = 0; j < iterations; j++){
+					
+					if ((!values.containsKey(commands.get(i+2)) && commands.get(i-2).equals("FOR")) || (!values.containsKey(commands.get(i+2)) && commands.get(i-6).equals("FOR"))){
+
+						if (commands.get(i + 1).equals("=")) {
+							values.put(commands.get(i), Integer.parseInt(commands.get(i + 2)));
+						}
+
+						if (commands.get(i + 1).equals("+=")) {
+							values.put(commands.get(i), values.get(commands.get(i)) + Integer.parseInt(commands.get(i + 2)));
+						}
+
+						if (commands.get(i + 1).equals("-=")) {
+							values.put(commands.get(i), values.get(commands.get(i)) - Integer.parseInt(commands.get(i + 2)));
+						}
+
+						if (commands.get(i + 1).equals("*=")) {
+							values.put(commands.get(i),	values.get(commands.get(i)) * Integer.parseInt(commands.get(i + 2)));
+						}
+					}
+					
+					///////////////////Assign from a variable//////////
+					
+					if ((values.containsKey(commands.get(i+2)) && commands.get(i-2).equals("FOR")) || (values.containsKey(commands.get(i+2)) && commands.get(i-6).equals("FOR"))){
+						
+						if (commands.get(i + 1).equals("=")) {
+							values.put(commands.get(i),
+									values.get(commands.get(i + 2)) );
+						}
+
+						if (commands.get(i + 1).equals("+=")) {
+							values.put(
+									commands.get(i),
+									values.get(commands.get(i))
+											+ values.get(commands.get(i + 2)));
+						}
+
+						if (commands.get(i + 1).equals("-=")) {
+							values.put(
+									commands.get(i),
+									values.get(commands.get(i))
+											- values.get(commands.get(i + 2)));
+						}
+
+						if (commands.get(i + 1).equals("*=")) {
+							values.put(
+									commands.get(i),
+									values.get(commands.get(i))
+											* values.get(commands.get(i + 2)));
+						}
+					}
+					
+					if(!commands.get(i).equals("ENDFOR")){
+						j--;
+					}
+					
+					if(commands.get(i).equals("ENDFOR")){
+						i = i - 9;
+					}
+					
+					i++;
+				}
+			}
+			
 
 		}
 
