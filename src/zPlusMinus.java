@@ -36,11 +36,19 @@ public class zPlusMinus {
 	public zPlusMinus() {
 		commands = new ArrayList<String>();
 
+		//This next line is if you want to time your program
+		//long startTime = System.currentTimeMillis();
+		
 		// test method is used to testing interpretation
 		// test();
 		readFile();
 		interpretCode();
 		printValues();
+		
+		//This next section is if you want to time your program
+//		long stopTime = System.currentTimeMillis();
+//		long elapsedTime = stopTime - startTime;
+//		System.out.println("Time elapsed: " + elapsedTime + " milliseconds");
 	}
 
 	/**
@@ -87,7 +95,7 @@ public class zPlusMinus {
 		Scanner fileScanner = null;
 
 		try {
-			fileScanner = new Scanner(new File("prog4.zpm"));
+			fileScanner = new Scanner(new File("prog6.zpm"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
