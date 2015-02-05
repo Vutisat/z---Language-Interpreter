@@ -34,14 +34,15 @@ public class zPlusMinus {
 	private void test() {
 		int a = 0;
 		int b = 0 ;
-		a = 3 ;
+		 a = 3 ;
 		a *= 30 ;
+		a = -3 ;
 		b += a ;
 		b += b ;
 		a = a ;
-		a = 4 ;
-		b *= 2 ;
-
+		a += 4 ;
+		b += 2 ;
+		
 		System.out.println("a = " + a);
 		System.out.println("b = " + b);
 	}
@@ -51,7 +52,7 @@ public class zPlusMinus {
 		Scanner fileScanner = null;
 
 		try {
-			fileScanner = new Scanner(new File("prog1.zpm"));
+			fileScanner = new Scanner(new File("prog2.zpm"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
